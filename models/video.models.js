@@ -1,54 +1,47 @@
-import mongoose from 'mongoose';
-
-const userSchema = new Schema(
+import mongoose, { Schema } from "mongoose";
+import mongooseAggregatePaginate from "mongoose-aggregate-paginate-v2";
+const videoSchema = new Schema(
     {
-        username: {
+        videoFile: {
+            type: String,
+            required: true
+        },
+        thumbnail: {
             type: String,
             required: true,
-            unique: true,
-            lowercase: true,
-            trim: true,
-            index: true,
         },
+        title: {
+            type: String,
+            required: true,
+        },
+        description: {
+            type: String,
+            required: true,
+        },
+        duration: {
+            type: Number,
+            required: true,
+        },
+        view: {
+            type: Number,
+            default: 0,
+        },
+        isPublished: {
+            type: Boolean,
+            default: true,
+        },
+        owener: {
+            type: Schema.Types.ObjectId,
+            ref: "User",
 
-        eamil: {
-            type: String,
-            required: true,
-            unique: true,
-            lowercase: true,
-            trim: true,
-        },
-        fullname: {
-            type: String,
-            required: true,
-            trim: true,
-            index: true,
-        },
-        avatar: {
-            type: String,
-            required: true,
-        },
-        coverImage: {
-            type: String,
-        },
-        watchHistory: [
-            {
-                type: Schema.Type.ObjectId,
-                ref: "Video",
-            }
-        ],
-        password: {
-            type: String,
-            required: [true, 'Password is required']
-        },
-        refreshToken: {
-            type: String,
         }
 
     },
     {
-        timestamp: true
+        timestamps: true
     }
 )
 
-export const User = mongoose.model("User", userSchema);
+
+videoSchema.plugin(mongooseAggregatePaginate)
+export const Video = mongoose.model("Video", videoSchema); 
